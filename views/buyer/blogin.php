@@ -12,16 +12,21 @@
             $file = fopen('info.txt', 'r');
             $user = fgets($file);
             $info = explode('|', $user);
-            if (trim($info[1]) == $email && trim($info[4]) == $password){
-                $_SESSION['loggedin'] = true;
-                $cookie_name = "email";
-                $cookie_value = $email;
-                setcookie($cookie_name,$cookie_value, time() + 300, '/');
-                header('Location:bdashboard.php');
+            $size = count($info);
+
+            for($i=1,$j=4; $i < $size-1; $i=$i+5, $j=$j+5){
+                if (trim($info[$i]) == $email && trim($info[$j]) == $password){
+                    $_SESSION['loggedin'] = true;
+                    $_SESSION['id'] = $i;
+                    $cookie_name = "email";
+                    $cookie_value = $email;
+                    setcookie($cookie_name,$cookie_value, time() + 300, '/');
+                    header('Location:bdashboard.php');
                 }
                 else{
                     $flag++;
                 }
+            }
 
             }
             fclose($file);
@@ -42,6 +47,7 @@
                 <br><br>
                 <a href="bregister.php">Don't have any account?</a><br>
                 <a href="/index.php">Go Back To Home?</a>
+                <?php //var_dump($size);?>
 
             </form>
         </div>
